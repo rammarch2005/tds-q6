@@ -1,4 +1,4 @@
-name: Multi-Platform Matrix Build with Artifacts
+name: Matrix Build - cfa08ff
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
 
 jobs:
   build:
-    name: Build Matrix Job
-    runs-on: ${{ matrix.os }}
+    name: Build for Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.9', '3.10', '3.11']
 
     steps:
@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: matrix-cfa08ff
-        run: echo "Building for OS: ${{ matrix.os }} and Python: ${{ matrix.python-version }}"
+        run: echo "Building for Python version ${{ matrix.python-version }}"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -28,11 +28,11 @@ jobs:
 
       - name: Generate build artifact
         run: |
-          echo "Build output for OS=${{ matrix.os }} with Python=${{ matrix.python-version }}" > output-${{ matrix.os }}-${{ matrix.python-version }}.txt
-          echo "Timestamp: $(date)" >> output-${{ matrix.os }}-${{ matrix.python-version }}.txt
+          echo "Build output for Python version ${{ matrix.python-version }}" > output-${{ matrix.python-version }}.txt
+          echo "Timestamp: $(date)" >> output-${{ matrix.python-version }}.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-cfa08ff-${{ matrix.os }}-py${{ matrix.python-version }}
-          path: output-${{ matrix.os }}-${{ matrix.python-version }}.txt
+          name: build-cfa08ff-py${{ matrix.python-version }}
+          path: output-${{ matrix.python-version }}.txt
